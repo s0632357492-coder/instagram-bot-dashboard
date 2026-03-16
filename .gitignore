@@ -1,8 +1,18 @@
+# Environment variables
 .env
+
+# Python cache
 __pycache__/
 *.pyc
 
-data/sessions/
+# Logs
 logs/
-
 *.log
+
+# Instagram session (สำคัญมาก ห้าม push)
+data/sessions/
+session.json
+
+# OS files
+.DS_Store
+Thumbs.db
