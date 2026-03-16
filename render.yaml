@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: instabot-dashboard
+    runtime: docker
+    plan: free
+    branch: main
+    healthCheckPath: /

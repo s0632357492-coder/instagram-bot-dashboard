@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | InstaBot Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            overflow: hidden;
+        }
+
+        .bg-gradient-animate {
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #1e1b4b);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .ig-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(249, 206, 52, 0.15) 0%, rgba(238, 42, 123, 0.15) 50%, rgba(98, 40, 215, 0.15) 100%);
+            filter: blur(60px);
+            z-index: -1;
+            border-radius: 50%;
+        }
+
+        .input-glow:focus {
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+            border-color: #6366f1;
+        }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-instagram:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(220, 39, 67, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gradient-animate min-h-screen flex items-center justify-center p-4">
+
+    <div class="ig-glow top-1/4 left-1/4"></div>
+    <div class="ig-glow bottom-1/4 right-1/4"></div>
+
+    <div class="glass-card w-full max-auto max-w-md rounded-3xl p-8 animate-fade-in">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-900 border border-slate-700 mb-4">
+                <i class="fab fa-instagram text-3xl text-transparent bg-clip-text bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-white tracking-tight">InstaBot <span class="text-indigo-400">Pro</span></h1>
+            <p class="text-slate-400 mt-2 text-sm">Automation & Analytics Dashboard</p>
+        </div>
+
+        <form action="/login" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 ml-1">Instagram Username</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-500">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <input type="text" name="username" required
+                        class="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 input-glow transition-all"
+                        placeholder="username">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 ml-1">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-500">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" name="password" required
+                        class="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 input-glow transition-all"
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" 
+                    class="w-full btn-instagram text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center space-x-2">
+                    <i class="fas fa-rocket"></i>
+                    <span>ACCESS DASHBOARD</span>
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-slate-700/50 text-center">
+            <p class="text-xs text-slate-500">
+                <i class="fas fa-shield-alt mr-1"></i> 
+                Secure Session Management Active
+            </p>
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="absolute top-10 right-10 bg-red-500/10 border border-red-500/50 text-red-500 px-6 py-4 rounded-2xl backdrop-blur-md animate-fade-in">
+        <div class="flex items-center space-x-3">
+            <i class="fas fa-exclamation-circle"></i>
+            <span class="font-medium text-sm">{{ error }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+</body>
+</html>
