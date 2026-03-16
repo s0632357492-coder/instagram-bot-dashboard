@@ -61,19 +61,26 @@ def create_app():
     @app.before_request
     def require_login():
 
-        # endpoint บางครั้งเป็น None
+        # endpoint บางครั้ง None
         if request.endpoint is None:
             return
 
-        allowed_routes = [
+        # allow public routes
+        public_routes = [
             "auth.login",
             "auth.logout",
             "static"
         ]
 
-        if request.endpoint in allowed_routes:
+        # allow static files
+        if request.endpoint.startswith("static"):
             return
 
+        # allow login routes
+        if request.endpoint in public_routes:
+            return
+
+        # check login
         if "user" not in session:
             return redirect("/login")
 
@@ -124,6 +131,7 @@ def start_bot_background():
     def run_bot():
 
         try:
+
             from bot.instagrapi_bot import bot_instance
 
             logger.info("Bot started in background thread.")
@@ -160,12 +168,8 @@ if __name__ == "__main__":
         exit(1)
 
     app.run(
-
         host="0.0.0.0",
-
         port=int(os.environ.get("PORT", 10000)),
-
         debug=Config.DEBUG,
-
         threaded=True
     )
