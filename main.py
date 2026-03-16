@@ -1,6 +1,6 @@
 import os
 import threading
-from flask import Flask, render_template, session, redirect
+from flask import Flask, render_template, session, redirect, request
 from config import Config
 from routes.dashboard_routes import dashboard_bp
 from routes.bot_routes import bot_bp
@@ -44,6 +44,13 @@ def create_app():
     logger.info("Initializing Instagram Bot Dashboard...")
 
     # -----------------------------
+    # REGISTER BLUEPRINTS
+    # -----------------------------
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(dashboard_bp)
+    app.register_blueprint(bot_bp)
+
+    # -----------------------------
     # LOGIN PROTECTION
     # -----------------------------
     @app.before_request
@@ -51,18 +58,15 @@ def create_app():
 
         allowed_routes = [
             "auth.login",
+            "auth.logout",
             "static"
         ]
 
-        if session.get("user") is None and (not str(getattr(__import__("flask").request, "endpoint", "")).startswith("auth")):
-            return redirect("/login")
+        if request.endpoint in allowed_routes:
+            return
 
-    # -----------------------------
-    # REGISTER BLUEPRINTS
-    # -----------------------------
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(dashboard_bp)
-    app.register_blueprint(bot_bp)
+        if "user" not in session:
+            return redirect("/login")
 
     # -----------------------------
     # GLOBAL STATS
