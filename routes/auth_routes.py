@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, redirect, session, flash
+from flask import Blueprint, render_template, request, redirect, session, flash, url_for
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -16,13 +16,17 @@ def login():
 
         if username == IG_USERNAME and password == IG_PASSWORD:
 
+            # ตั้ง session
             session["user"] = username
-            return redirect("/")
+            session.permanent = True
+
+            # เข้า dashboard ทันที
+            return redirect("/dashboard")
 
         else:
 
             flash("Invalid credentials")
-            return redirect("/login")
+            return redirect(url_for("auth.login"))
 
     return render_template("login.html")
 

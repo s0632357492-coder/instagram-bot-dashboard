@@ -31,6 +31,11 @@ def create_app():
     # -----------------------------
     app.secret_key = os.getenv("SECRET_KEY", "instabot_secret")
 
+    # SESSION CONFIG (สำคัญสำหรับ Render HTTPS)
+    app.config["SESSION_COOKIE_SECURE"] = True
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+    app.config["SESSION_PERMANENT"] = False
+
     # Load config
     app.config.from_object(Config)
 
@@ -55,6 +60,10 @@ def create_app():
     # -----------------------------
     @app.before_request
     def require_login():
+
+        # endpoint บางครั้งเป็น None
+        if request.endpoint is None:
+            return
 
         allowed_routes = [
             "auth.login",
@@ -118,9 +127,11 @@ def start_bot_background():
             from bot.instagrapi_bot import bot_instance
 
             logger.info("Bot started in background thread.")
+
             bot_instance.start()
 
         except Exception as e:
+
             logger.error(f"Bot thread error: {str(e)}")
 
     bot_thread = threading.Thread(
@@ -144,12 +155,17 @@ app = create_app()
 if __name__ == "__main__":
 
     if not Config.validate():
+
         logger.critical("Invalid configuration. Exiting.")
         exit(1)
 
     app.run(
+
         host="0.0.0.0",
+
         port=int(os.environ.get("PORT", 10000)),
+
         debug=Config.DEBUG,
+
         threaded=True
     )
